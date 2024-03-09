@@ -6,7 +6,7 @@ metadata:
     app: biblioteca
     type: frontend
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: biblioteca
@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: contenedor-biblioteca
-          image: fmp24/biblioteca:v1
+          image: fmp24/biblioteca:v1_2
           ports:
             - containerPort: 80
               name: http-port
