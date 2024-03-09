@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mariadb-deployment
+  labels:
+    app: biblioteca
+    type: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: biblioteca
+      type: database
+  template:
+    metadata:
+      labels:
+        app: biblioteca
+        type: database
+    spec:
+      volumes:
+        - name: pvc-mariadb
+          persistentVolumeClaim:
+            claimName: pvc-mariadb
+      containers:
+        - name: contenedor-mariadb
+          image: mariadb
+          volumeMounts:
+            - name: pvc-mariadb
+              mountPath: /var/lib/mysql
+          ports:
+            - containerPort: 3306
+              name: db-port
+          env:
+            - name: MYSQL_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: db-cm
+                  key: dbuser
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: db-cm
+                  key: dbname
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-pw
+                  key: dbpass
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-pw
+                  key: dbroot

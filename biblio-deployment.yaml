@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: biblioteca-deployment
+  labels:
+    app: biblioteca
+    type: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: biblioteca
+      type: frontend
+  template:
+    metadata:
+      labels:
+        app: biblioteca
+        type: frontend
+    spec:
+      containers:
+        - name: contenedor-biblioteca
+          image: fmp24/biblioteca:v1
+          ports:
+            - containerPort: 80
+              name: http-port
+          env:
+            - name: BASE_URL
+              value: "http://www.franbiblio.org/"
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: db-cm
+                  key: dbhost
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: db-cm
+                  key: dbuser
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: db-pw
+                  key: dbpass
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: db-cm
+                  key: dbname

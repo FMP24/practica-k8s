@@ -1,0 +1,9 @@
+apiVersion: v1
+data:
+  dbhost: mariadb-service
+  dbname: biblioteca
+  dbuser: admin
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: db-cm
